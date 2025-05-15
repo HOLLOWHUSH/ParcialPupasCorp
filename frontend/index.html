@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Gestión de Pupusería</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- navbar -->
+<nav>
+    <button onclick="showTab('clientes')">Clientes</button>
+    <button onclick="showTab('pedidos')">Pedidos</button>
+    <button onclick="showTab('pupusas')">Pupusas</button>
+    <button onclick="showTab('restaurante')">Restaurante</button> <!-- Nueva pestaña de Restaurante -->
+    <button onclick="showTab('carrito')">Ver Carrito</button>
+</nav>
+
+<div id="clientes" class="tab active">
+    <h2>Clientes</h2>
+    <table id="clientes-table">
+        <thead>
+        <tr>
+            <th>ID</th><th>Nombre</th><th>Teléfono</th><th>Dirección</th><th>Acciones</th>
+        </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+    <button onclick="showTab('agregarCliente')">Agregar Cliente</button>
+</div>
+
+<div id="pedidos" class="tab">
+    <h2>Pedidos</h2>
+    <table id="pedidos-table">
+        <thead>
+        <tr>
+            <th>ID</th><th>Dirección</th><th>Para Llevar</th><th>Restaurante</th><th>Estado</th><th>Cliente</th><th>Acciones</th>
+        </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+    <button onclick="showTab('agregarPedido')">Agregar Pedido</button>
+</div>
+
+<div id="agregarCliente" class="tab">
+    <h2>Agregar Cliente</h2>
+    <form id="cliente-form">
+        <input type="hidden" id="cliente-id">
+        <label>Nombre: <input type="text" id="nombre" required></label>
+        <label>Teléfono: <input type="text" id="telefono" required></label>
+        <label>Dirección: <input type="text" id="direccion" required></label>
+        <button type="submit">Guardar</button>
+        <button type="button" class="cancel-btn" onclick="cancelEdit()">Cancelar</button>
+    </form>
+</div>
+
+<div id="agregarPedido" class="tab">
+    <h2>Agregar Pedido</h2>
+    <form id="pedido-form">
+        <input type="hidden" id="pedido-id">
+        <label>Dirección: <input type="text" id="direccion-pedido" required></label>
+        <label>Para Llevar: <input type="checkbox" id="para-llevar"></label>
+        <label>Comer en Restaurante: <input type="checkbox" id="comer-en-restaurante"></label>
+        <label>Estado:
+            <select id="estado">
+                <option value="pendiente">Pendiente</option>
+                <option value="en_proceso">En Proceso</option>
+                <option value="entregado">Entregado</option>
+            </select>
+        </label>
+        <label>ID Cliente: <input type="number" id="cliente-id-pedido" required></label>
+        <button type="submit">Guardar</button>
+        <button type="button" class="cancel-btn" onclick="cancelEditPedido()">Cancelar</button>
+    </form>
+</div>
+
+<!-- Agregar la nueva pestaña de Pupusas -->
+<div id="pupusas" class="tab">
+    <h2>Pupusas</h2>
+    <table id="pupusas-table">
+        <thead>
+        <tr>
+            <th>ID</th><th>Nombre</th><th>Precio</th><th>Acciones</th>
+        </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+    <button onclick="showTab('agregarPupusa')">Agregar Pupusa</button>
+</div>
+
+<!-- Agregar el formulario para agregar/editar pupusas -->
+<div id="agregarPupusa" class="tab">
+    <h2>Agregar Pupusa</h2>
+    <form id="pupusa-form">
+        <input type="hidden" id="pupusa-id">
+        <label>Nombre: <input type="text" id="nombre-pupusa" required></label>
+        <label>Precio: <input type="text" id="precio-pupusa" required></label>
+        <button type="submit">Guardar</button>
+        <button type="button" class="cancel-btn" onclick="cancelEditPupusa()">Cancelar</button>
+    </form>
+</div>
+
+<!-- Nueva Pestaña Restaurante -->
+<!-- Restaurante Tab -->
+<div id="restaurante" class="tab">
+    <h2>Restaurante Pedidos</h2>
+    <h3>Pedidos Actuales</h3>
+    <table id="restaurante-pedidos-table">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Dirección</th>
+            <th>Para Llevar</th>
+            <th>Comer en Restaurante</th>
+            <th>Estado</th>
+            <th>Cliente</th>
+            <th>Tiempo Activo</th> <!-- NUEVA COLUMNA -->
+            <th>Acciones</th>
+        </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+
+    <!-- Formulario para realizar pedido (Solo visible cuando se está en la pestaña Restaurante) -->
+    <div id="realizar-pedido">
+        <h3>Realizar Pedido</h3>
+        <form id="pedido-form-restaurante">
+            <label for="direccion-pedido-restaurante">Dirección de Entrega:</label>
+            <input type="text" id="direccion-pedido-restaurante" required>
+
+            <label for="para-llevar-restaurante">¿Para llevar?</label>
+            <input type="checkbox" id="para-llevar-restaurante">
+
+            <label for="comer-en-restaurante">¿Comer en Restaurante?</label>
+            <input type="checkbox" id="comer-en-restaurante">
+
+            <label for="restaurante-cliente-id-pedido">Cliente:</label>
+            <select id="restaurante-cliente-id-pedido"></select>
+
+            <label for="pupusas-select">Selecciona Pupusas:</label>
+            <select id="pupusas-select-restaurante" multiple></select>
+            <button type="submit">Realizar Pedido</button>
+        </form>
+    </div>
+
+    <!-- Mostrar el costo total -->
+    <h3>Costo Total: $<span id="costo-total">0</span></h3>
+
+    <!-- Mostrar factura -->
+    <div id="factura" style="display:none;">
+        <h3>Factura:</h3>
+        <p id="factura-detalle"></p>
+    </div>
+</div>
+
+<!-- Sección para gestionar el carrito y calcular el total -->
+<div id="restaurante" class="tab">
+    <h2>Restaurante</h2>
+    <form id="restaurante-pedido-form">
+        <label for="restaurante-cliente-id-pedido">Cliente:</label>
+        <select id="restaurante-cliente-id-pedido"></select>
+        <br>
+
+        <label for="direccion-pedido-restaurante">Dirección:</label>
+        <input type="text" id="direccion-pedido-restaurante" required>
+        <br>
+
+        <label for="para-llevar-restaurante">Para llevar:</label>
+        <input type="checkbox" id="para-llevar-restaurante">
+        <br>
+
+        <label for="comer-en-restaurante">Comer en restaurante:</label>
+        <input type="checkbox" id="comer-en-restaurante">
+        <br>
+
+        <label for="estado">Estado del pedido:</label>
+        <select id="estado">
+            <option value="pendiente">Pendiente</option>
+            <option value="preparando">Preparando</option>
+            <option value="completado">Completado</option>
+        </select>
+        <br>
+
+        <!-- Selector de pupusas -->
+        <label for="pupusas-select-restaurante">Seleccionar pupusa:</label>
+        <select id="pupusas-select-restaurante"></select>
+        <br>
+
+        <label for="cantidad-pupusa">Cantidad:</label>
+        <input type="number" id="cantidad-pupusa" placeholder="Cantidad" min="1" value="1">
+        <br>
+
+        <button type="button" onclick="agregarAlCarrito()">Agregar al carrito</button>
+
+        <!-- Carrito -->
+        <h3>Carrito</h3>
+        <ul id="carrito-lista"></ul>
+        <p><strong>Total:</strong> $<span id="carrito-total">0.00</span></p>
+
+        <button type="button" onclick="realizarPedido()">Realizar Pedido</button>
+    </form>
+
+    <h3>Pedidos Actuales</h3>
+    <table id="restaurante-pedidos-table">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Dirección</th>
+            <th>Para Llevar</th>
+            <th>Comer en Restaurante</th>
+            <th>Estado</th>
+            <th>Cliente</th>
+            <th>Acciones</th>
+        </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+</div>
+
+<!-- Incluye jsPDF -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+
+<script src="script.js"></script> <!-- Vincula el archivo JS -->
+</body>
+</html>
