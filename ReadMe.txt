@@ -73,7 +73,7 @@ Puedes usar Postman o Insomnia para probar los endpoints. La API devuelve:
 ------------------------------------------
 🧑‍💻 Autores
 
-✍️ Nombre del estudiante: [Tu Nombre Aquí]
+✍️ Nombre del estudiante: Jonathan Ceron, Victor Bautista, Kevin Zuniga, Steven Mancia
 🎓 Universidad Católica de El Salvador
 
 ------------------------------------------
